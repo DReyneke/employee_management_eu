@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useParams, useLocation } from "react-router-dom";
 import { updateEmployee, getManagerName } from '../../utils/firebaseUtils';
 import { TextField, Button, Box, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import './UpdateEmployee.css';
 
 const UpdateEmployee = ({ onClose, branchId, employeeNumber, currentEmployeeData }) => {
+  const location = useLocation();
   const [employeeData, setEmployeeData] = useState(currentEmployeeData);
   const [updatedFields, setUpdatedFields] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const { role, } = location.state;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -120,9 +123,13 @@ const UpdateEmployee = ({ onClose, branchId, employeeNumber, currentEmployeeData
           fullWidth
           margin="normal"
         />
+        {role === 'admin' && (
+          <>
         <Button variant="contained" color="primary" onClick={handleUpdateEmployee} fullWidth>
           Confirm Update
         </Button>
+        </>
+        )}
         <IconButton
           className="close-button"
           onClick={onClose}
