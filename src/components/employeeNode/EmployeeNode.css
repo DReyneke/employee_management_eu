@@ -1,0 +1,15 @@
+.employee-node {
+    cursor: pointer;
+    border-radius: 100%;
+    position: relative;
+    transform: translate(-50%, -50%);
+  }
+  
+  .employee-info-preview {
+    top: -200%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: 300px; /* Adjust as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
