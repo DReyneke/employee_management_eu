@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { getGravatarUrl } from '../../utils/gravatar';
+import { logoutUser } from '../../utils/authUtils'; // Import the logout function
 import './Sidebar.css';
 
 const Sidebar = ({ user }) => {
@@ -22,6 +23,11 @@ const Sidebar = ({ user }) => {
     });
   };
 
+  const handleLogout = async () => {
+    await logoutUser();
+    navigate('/');
+  };
+
   return (
     <div className="sidebar">
       <div className="user-info">
@@ -40,6 +46,7 @@ const Sidebar = ({ user }) => {
             <button className="nav-link" onClick={() => handleNavigation('/manageBranches')}>Manage Branches</button>
           </>
         )}
+        <button className="nav-link" onClick={handleLogout}>Logout</button>
       </nav>
       <div className="logo-container">
         <img src={logo} alt="Company Logo" className="logo" />

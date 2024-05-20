@@ -7,6 +7,7 @@ import './UpdateEmployee.css';
 const UpdateEmployee = ({ onClose, branchId, employeeNumber, currentEmployeeData }) => {
   const [employeeData, setEmployeeData] = useState(currentEmployeeData);
   const [updatedFields, setUpdatedFields] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +18,11 @@ const UpdateEmployee = ({ onClose, branchId, employeeNumber, currentEmployeeData
   };
 
   const handleUpdateEmployee = async () => {
+    if (updatedFields.managerNumber == employeeNumber) {
+      setErrorMessage("An employee cannot be his own manager.");
+      return;
+    }
+
     const updatedEmployeeData = { ...employeeData };
 
     // Only update fields that have been changed by the user
@@ -39,10 +45,13 @@ const UpdateEmployee = ({ onClose, branchId, employeeNumber, currentEmployeeData
       updatedEmployeeData.positionID = updatedFields.position.replace(/\s+/g, '');
     }
 
-    await updateEmployee(branchId, employeeNumber, updatedEmployeeData);
-    onClose();
+    const result = await updateEmployee(branchId, employeeNumber, updatedEmployeeData);
+    if (result.success) {
+      onClose();
+    } else {
+      setErrorMessage("Could not update employee data.");
+    }
   };
-
 
   return (
     <div className="overlay" onClick={onClose}>
@@ -50,6 +59,11 @@ const UpdateEmployee = ({ onClose, branchId, employeeNumber, currentEmployeeData
         <Typography variant="h6" component="h2" gutterBottom>
           Update employee
         </Typography>
+        {errorMessage && (
+          <Typography variant="body2" color="error" gutterBottom>
+            {errorMessage}
+          </Typography>
+        )}
         <TextField
           label="Name"
           name="name"

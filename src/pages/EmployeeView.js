@@ -81,7 +81,7 @@ const EmployeeView = () => {
   const [showAddEmployee, setShowAddEmployee] = useState(false);
   const [showRemoveEmployee, setShowRemoveEmployee] = useState(false);
   const [showSearchTree, setShowSearchTree] = useState(false);
-  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [translate, setTranslate] = useState({ x: 300, y: 50 });
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
@@ -93,16 +93,6 @@ const EmployeeView = () => {
 
     fetchTree();
   }, [branchId, reload]);
-
-  // useEffect(() => {
-  //   if (treeContainerRef.current) {
-  //     const { width, height } = treeContainerRef.current.getBoundingClientRect();
-  //     setTranslate({
-  //       x: width/2,
-  //       y: 50,
-  //     });
-  //   }
-  // }, [treeData]);
 
   // Function to capture node positions
   const captureNodePosition = (node, nodeDatum) => {
@@ -144,8 +134,8 @@ const EmployeeView = () => {
       const { width, height } = treeContainerRef.current.getBoundingClientRect();
       const { left, top } = targetNode;
       setTranslate({
-        x: width/2,
-        y: 50,
+        x: 0 + width/2,
+        y: 0 + height/2,
       });
     } else {
       // Flash the search button red for 2 seconds

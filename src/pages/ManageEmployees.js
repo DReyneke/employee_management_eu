@@ -22,6 +22,7 @@ const ManageEmployees = () => {
   const [showUpdateEmployee, setShowUpdateEmployee] = useState(false);
   const [showSearchEmployee, setShowSearchEmployee] = useState(false); // State for SearchEmployee
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -76,6 +77,24 @@ const ManageEmployees = () => {
     setShowSearchEmployee(false);
   };
 
+  const handleHeaderClick = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedEmployees = [...employees].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? 1 : -1;
+    }
+    return 0;
+  });
+
   return (
     <div className="manage-employees">
       <Sidebar user={{ user, role, email, name, surname, employeeNumber, position }} />
@@ -107,22 +126,22 @@ const ManageEmployees = () => {
               <table>
                 <thead>
                   <tr>
-                    <th>Employee Number</th>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Email</th>
-                    <th>Birth Date</th>
-                    <th>Manager Name</th>
-                    <th>Manager Number</th>
-                    <th>Head</th>
-                    <th>Position</th>
-                    <th>Position ID</th>
-                    <th>Salary</th>
-                    <th>Branch ID</th>
+                    <th onClick={() => handleHeaderClick('employeeNumber')}>Employee Number</th>
+                    <th onClick={() => handleHeaderClick('name')}>Name</th>
+                    <th onClick={() => handleHeaderClick('surname')}>Surname</th>
+                    <th onClick={() => handleHeaderClick('email')}>Email</th>
+                    <th onClick={() => handleHeaderClick('birthDate')}>Birth Date</th>
+                    <th onClick={() => handleHeaderClick('managerName')}>Manager Name</th>
+                    <th onClick={() => handleHeaderClick('managerNumber')}>Manager Number</th>
+                    <th onClick={() => handleHeaderClick('head')}>Head</th>
+                    <th onClick={() => handleHeaderClick('position')}>Position</th>
+                    <th onClick={() => handleHeaderClick('positionID')}>Position ID</th>
+                    <th onClick={() => handleHeaderClick('salary')}>Salary</th>
+                    <th onClick={() => handleHeaderClick('branchId')}>Branch ID</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {employees.map((employee) => (
+                  {sortedEmployees.map((employee) => (
                     <tr key={employee.employeeNumber} onClick={() => handleRowClick(employee)}>
                       <td>{employee.employeeNumber}</td>
                       <td>{employee.name}</td>

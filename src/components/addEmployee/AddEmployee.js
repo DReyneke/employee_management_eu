@@ -19,6 +19,7 @@ const AddEmployee = ({ onClose, branchId }) => {
     salary: '',
     surname: ''
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,31 +30,40 @@ const AddEmployee = ({ onClose, branchId }) => {
   };
 
   const handleAddEmployee = async () => {
+    if (employeeData.managerNumber == employeeData.employeeNumber) {
+      setErrorMessage("An employee cannot be their own manager.");
+      return;
+    }
+
     employeeData.positionID = employeeData.position.replace(/\s+/g, ''); 
 
     if (employeeData.managerNumber == 0){
       employeeData.head = true;
       employeeData.managerName = "None";
-    }else{
+    } else {
       employeeData.managerName = await getManagerName(employeeData.managerNumber, branchId);
     }
 
-    await addEmployee(branchId, employeeData);
-    setEmployeeData({
-      birthDate: '',
-      branchId: branchId,
-      email: '',
-      employeeNumber: '',
-      managerName: '',
-      managerNumber: '',
-      head: false,
-      name: '',
-      position: '',
-      positionID: '',
-      salary: '',
-      surname: ''
-    });
-    onClose();
+    const result = await addEmployee(branchId, employeeData);
+    if (result.success) {
+      setEmployeeData({
+        birthDate: '',
+        branchId: branchId,
+        email: '',
+        employeeNumber: '',
+        managerName: '',
+        managerNumber: '',
+        head: false,
+        name: '',
+        position: '',
+        positionID: '',
+        salary: '',
+        surname: ''
+      });
+      onClose();
+    } else {
+      setErrorMessage("Could not add employee data.");
+    }
   };
 
   return (
@@ -62,6 +72,11 @@ const AddEmployee = ({ onClose, branchId }) => {
         <Typography variant="h6" component="h2" gutterBottom>
           Add a new employee
         </Typography>
+        {errorMessage && (
+          <Typography variant="body2" color="error" gutterBottom>
+            {errorMessage}
+          </Typography>
+        )}
         <TextField
           label="Name"
           name="name"

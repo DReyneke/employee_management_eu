@@ -19,7 +19,7 @@
 
 .loading-style {
   position: relative;
-  left: 30vw;
+  left: 30vw !important;
   top: 10vh;
   display: flex;
   justify-content: center;

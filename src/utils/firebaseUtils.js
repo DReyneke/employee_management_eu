@@ -90,9 +90,9 @@ export const addEmployee = async (branchId, employee) => {
 
     var managerPosition;
 
-    if (employee.managerNumber == 0){
+    if (employee.managerNumber == 0) {
       managerPosition = "None";
-    }else{
+    } else {
       managerPosition = await getManagerPosition(employee.managerNumber, branchId);
     }
 
@@ -104,8 +104,10 @@ export const addEmployee = async (branchId, employee) => {
     }
 
     await setDoc(doc(firestore, `branches/${branchId}/employees`, employee.employeeNumber), employee);
+    return { success: true };
   } catch (error) {
     console.error('Error adding employee: ', error);
+    return { success: false, error: error.message };
   }
 };
 
@@ -305,8 +307,9 @@ export const updateEmployee = async (branchId, employeeNumber, updatedEmployeeDa
 
     const employeeDocRef = doc(firestore, `branches/${branchId}/employees/${employeeNumber}`);
     await updateDoc(employeeDocRef, updatedEmployeeData);
+    return { success: true };
   } catch (error) {
-    console.error('Error updating employee: ', error);
+    return { success: false, error: error.message };
   }
 };
 

@@ -28,7 +28,7 @@ const ActivationPage = () => {
         employeeNumber: result.employeeNumber,
         branchId: result.branchId,
       };
-      navigate('/branchView', { state: userState });
+      navigate('/');
     } else {
       setError(result.message);
     }
