@@ -64,9 +64,9 @@ const BranchView = () => {
           </div>
         )}
       </div>
-      <button className="add-button" onClick={handleAddBranchClick}>
+      {/* <button className="add-button" onClick={handleAddBranchClick}>
         +
-      </button>
+      </button> */}
       {showAddBranch ? <AddBranch onClose={handleCloseAddBranch} /> : ""}
     </div>
   );
